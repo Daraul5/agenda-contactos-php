@@ -1,0 +1,14 @@
+# Archivos del sistema operativo y editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# No ignorar archivos estáticos o predeterminados de la carpeta archivos/
+archivos/*
+!archivos/default.png
+!archivos/contacto1.png
+!archivos/contacto2.png
+!archivos/contacto3.png
+!archivos/.gitkeep
