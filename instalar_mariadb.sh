@@ -73,12 +73,14 @@ fi
 # 6. Crear base de datos y configurar usuario root para conexión local TCP/IP
 echo -e "\n${BLUE}[5/5] Configurando base de datos 'agenda_db' e importando schema.sql...${NC}"
 
-# Configurar permisos para root en localhost y 127.0.0.1
+# Configurar permisos para root en localhost y 127.0.0.1 (remover restricción unix_socket)
 mariadb -e "
 CREATE DATABASE IF NOT EXISTS agenda_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER USER 'root'@'localhost' IDENTIFIED BY '';
 CREATE USER IF NOT EXISTS 'root'@'127.0.0.1' IDENTIFIED BY '';
-GRANT ALL PRIVILEGES ON agenda_db.* TO 'root'@'127.0.0.1';
-GRANT ALL PRIVILEGES ON agenda_db.* TO 'root'@'localhost';
+ALTER USER 'root'@'127.0.0.1' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'127.0.0.1' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 "
 
