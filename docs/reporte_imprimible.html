@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Evidencias - Mini Proyecto 2 (CRUD PHP & PDO)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --dark: #0f172a;
+            --gray-bg: #f8fafc;
+            --border: #cbd5e1;
+            --text: #334155;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: var(--text);
+            background-color: #e2e8f0;
+            margin: 0;
+            padding: 20px;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+        .page {
+            width: 216mm;
+            min-height: 279mm;
+            padding: 20mm;
+            margin: 0 auto 20px auto;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .page-content { flex-grow: 1; }
+        .page-header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-header h2 {
+            margin: 0;
+            font-size: 16px;
+            color: var(--primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .page-header .spec-tag {
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+        .page-footer {
+            border-top: 1px solid var(--border);
+            padding-top: 8px;
+            margin-top: 15px;
+            font-size: 11px;
+            color: #64748b;
+            display: flex;
+            justify-content: space-between;
+        }
+        .cover-page {
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            flex-direction: column;
+            padding: 40mm 25mm;
+        }
+        .cover-badge {
+            display: inline-block;
+            background: #1e3a8a;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        .cover-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark);
+            margin: 10px 0;
+            line-height: 1.2;
+        }
+        .cover-subtitle {
+            font-size: 16px;
+            color: #475569;
+            margin-bottom: 40px;
+        }
+        .cover-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: left;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+        .cover-card dl {
+            margin: 0;
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            row-gap: 10px;
+            font-size: 13px;
+        }
+        .cover-card dt { font-weight: 700; color: #1e293b; }
+        .cover-card dd { margin: 0; color: #475569; }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 12px 0 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .code-container {
+            background: #0f172a;
+            color: #f1f5f9;
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            line-height: 1.45;
+            overflow-x: auto;
+            border: 1px solid #1e293b;
+            margin-bottom: 12px;
+        }
+        .code-container .code-header {
+            color: #94a3b8;
+            font-size: 10px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+        .screenshot-box {
+            border: 2px dashed #94a3b8;
+            border-radius: 6px;
+            background: #f8fafc;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 12px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .screenshot-box img {
+            max-width: 100%;
+            max-height: 180px;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .screenshot-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 6px;
+        }
+        .explanation-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 10px 14px;
+            border-radius: 0 6px 6px 0;
+            font-size: 12.5px;
+            color: #1e293b;
+        }
+        .explanation-box p {
+            margin: 0 0 6px 0;
+            text-align: justify;
+        }
+        .explanation-box p:last-child { margin-bottom: 0; }
+
+        @media print {
+            body { background: transparent; padding: 0; }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                min-height: 100vh;
+                page-break-after: always;
+                break-after: page;
+            }
+            .no-print { display: none !important; }
+        }
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .print-btn:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn no-print" onclick="window.print()">
+        🖨️ Imprimir / Guardar como PDF
+    </button>
+
+    <!-- PORTADA DEL DOCUMENTO -->
+    <div class="page cover-page">
+        <div>
+            <span class="cover-badge">UNIDAD 4: PROGRAMACIÓN DEL LADO DEL SERVIDOR CON PHP</span>
+            <h1 class="cover-title">REPORTE TÉCNICO DE EVIDENCIAS</h1>
+            <p class="cover-subtitle">Mini Proyecto 2: Desarrollo Web con PHP y Base de Datos (CRUD)</p>
+            
+            <div class="cover-card">
+                <dl>
+                    <dt>Asignatura:</dt>
+                    <dd>Programación Web</dd>
+                    
+                    <dt>Proyecto:</dt>
+                    <dd>Agenda de Contactos con MySQL y PDO</dd>
+                    
+                    <dt>Integrantes:</dt>
+                    <dd>
+                        • David Raúl Vázquez Yáñez<br>
+                        • Rebeca Jiménez Díaz<br>
+                        • Elías Raziel Gómez Carrión
+                    </dd>
+                    
+                    <dt>Repositorio GitHub:</dt>
+                    <dd><code>https://github.com/Daraul5/agenda-contactos-php</code></dd>
+                    
+                    <dt>Servidor en Vivo:</dt>
+                    <dd><code>https://agenda-contactos-pw.infinityfreeapp.com</code></dd>
+                    
+                    <dt>Fecha:</dt>
+                    <dd><?= date('d/m/Y'); ?></dd>
+                </dl>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Universidad / Facultad de Ingeniería</span>
+            <span>Programación Web · Mini Proyecto 2</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 1 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 1: Conexión a Base de Datos con PDO</h2>
+                <span class="spec-tag">Requisito 1 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (config/db.php)</div>
+            <div class="code-container">
+                <div class="code-header">PHP PDO Connection Handler — config/db.php</div>
+<pre><code>function getDBConnection(): PDO {
+    static $pdo = null;
+    if ($pdo === null) {
+        $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4";
+        $options = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ];
+        try {
+            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+        } catch (PDOException $e) {
+            error_log("Error crítico en PDO: " . $e->getMessage());
+            die("Error de conexión seguro...");
+        }
+    }
+    return $pdo;
+}</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: NAVEGADOR EN index.php CONECTADO EXITOSAMENTE A MYSQL]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/index.php o https://tudominio.infinityfreeapp.com/index.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>Se implementó la conexión centralizada a la base de datos MySQL haciendo uso exclusivo de la extensión <strong>PDO (PHP Data Objects)</strong> dentro de la función <code>getDBConnection()</code>. Para optimizar el rendimiento y el consumo de sockets en el servidor, se empleó el patrón estático (Singleton local), evitando la apertura innecesaria de múltiples conexiones durante un mismo ciclo de petición HTTP. La cadena de conexión DSN especifica explícitamente el juego de caracteres <code>utf8mb4</code> para admitir acentos y caracteres especiales sin corrupción de datos.</p>
+                <p>Como medida fundamental de seguridad y robustez, se configuró el arreglo asociativo <code>$options</code> activando <code>PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION</code>, lo cual permite interceptar cualquier anomalía mediante bloques <code>try-catch</code>. Asimismo, se configuró <code>PDO::ATTR_EMULATE_PREPARES =&gt; false</code> para delegar la preparación de consultas directamente en el motor nativo de MySQL, y se encapsuló cualquier posible fallo crítico registrándolo en los logs del servidor mediante <code>error_log()</code> sin exponer contraseñas ni detalles de la infraestructura al usuario.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 2</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 2 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 2: Uso de Sentencias Preparadas (prepare y execute)</h2>
+                <span class="spec-tag">Requisito 2 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (guardar.php)</div>
+            <div class="code-container">
+                <div class="code-header">Sentencias Preparadas con Marcadores Nombrados — guardar.php</div>
+<pre><code>// 1. Preparación de la consulta con marcadores nombrados
+$sql = "INSERT INTO contactos (nombre, apellido, telefono, foto, email, direccion, notas) 
+        VALUES (:nombre, :apellido, :telefono, :foto, :email, :direccion, :notas)";
+
+$stmt = $pdo->prepare($sql);
+
+// 2. Ejecución vinculando datos de forma fuertemente tipada
+$stmt->execute([
+    ':nombre'    => $nombre,
+    ':apellido'  => $apellido,
+    ':telefono'  => $telefono,
+    ':foto'      => $nombreFotoGuardada,
+    ':email'     => !empty($email) ? $email : null,
+    ':direccion' => !empty($direccion) ? $direccion : null,
+    ':notas'     => !empty($notas) ? $notas : null,
+]);</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: REGISTRO INSERTADO CON PARÁMETROS PREPARADOS]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/guardar.php -> Redirección a index.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>Se implementó el mecanismo de <strong>Sentencias Preparadas (Prepared Statements)</strong> nativas de PDO mediante la separación de dos fases indispensables: compilación y ejecución. En la primera fase, se invoca <code>$pdo-&gt;prepare($sql)</code> enviando la estructura estática de la consulta con marcadores de posición nombrados (<code>:nombre</code>, <code>:apellido</code>, <code>:telefono</code>, etc.), permitiendo que el motor MySQL compile el plan de ejecución antes de recibir cualquier entrada de usuario.</p>
+                <p>En la segunda fase, se ejecuta <code>$stmt-&gt;execute($params)</code> enviando los valores validados en un arreglo asociativo fuertemente vinculado. Esta técnica garantiza inmunidad total contra ataques de <strong>Inyección SQL (SQLi)</strong>, puesto que el motor de base de datos interpreta las variables estrictamente como literales de datos y nunca como código ejecutable de la consulta.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 3</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 3 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 3: Inserción de Datos (CREATE)</h2>
+                <span class="spec-tag">Requisito 3 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (crear.php / guardar.php)</div>
+            <div class="code-container">
+                <div class="code-header">Lógica de Inserción y Subida de Archivo — guardar.php</div>
+<pre><code>// Subida de imagen con nombre criptográfico y ejecución INSERT
+$nombreFotoGuardada = 'contacto_' . bin2hex(random_bytes(8)) . '_' . time() . '.' . $extension;
+move_uploaded_file($_FILES['foto']['tmp_name'], $directorioDestino . $nombreFotoGuardada);
+
+$sql = "INSERT INTO contactos (nombre, apellido, telefono, foto, email, direccion, notas) 
+        VALUES (:nombre, :apellido, :telefono, :foto, :email, :direccion, :notas)";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([...]);
+
+setFlash('success', '¡Contacto registrado exitosamente!');
+header('Location: index.php');</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: FORMULARIO DE ALTA Y MENSAJE FLASH DE ÉXITO]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/crear.php -> index.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>La operación de creación (<strong>CREATE</strong>) se diseñó bajo una estricta separación entre la capa de presentación (<code>crear.php</code>) y la capa de lógica de negocio (<code>guardar.php</code>). El formulario HTML5 utiliza el método HTTP <code>POST</code> junto con <code>enctype="multipart/form-data"</code> para soportar la transmisión simultánea de texto y el archivo binario correspondiente a la fotografía obligatoria del contacto.</p>
+                <p>En el controlador <code>guardar.php</code>, una vez validados todos los requisitos en el servidor y transferido el archivo al directorio <code>archivos/</code> con una nomenclatura única generada mediante <code>bin2hex(random_bytes(8))</code>, se dispara la consulta <code>INSERT INTO contactos</code> con PDO. En caso de suscitarse un error en la base de datos, el script implementa un mecanismo de reversión manual que elimina la fotografía física recién subida para evitar archivos huérfanos en el disco del hosting.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 4</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 4 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 4: Consulta de Datos (READ – Listado de Contactos)</h2>
+                <span class="spec-tag">Requisito 4 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (index.php)</div>
+            <div class="code-container">
+                <div class="code-header">Consulta General y Despliegue en Vista — index.php</div>
+<pre><code>// Extracción de contactos con PDO y fetchAll
+$sql = "SELECT * FROM contactos ORDER BY nombre ASC, apellido ASC";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$contactos = $stmt->fetchAll();
+$totalRegistros = count($contactos);
+
+// Iteración en tabla HTML:
+&lt;?php foreach ($contactos as $c): ?&gt;
+    &lt;tr&gt;
+        &lt;td&gt;&lt;img src="&lt;?= e($rutaFoto); ?&gt;" class="contact-avatar-sm"&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;?= e($c['nombre'] . ' ' . $c['apellido']); ?&gt;&lt;/td&gt;
+        &lt;td&gt;&lt;?= e($c['telefono']); ?&gt;&lt;/td&gt;
+...</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: TABLA PRINCIPAL DE CONTACTOS CON FOTOS Y BOTONES]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/index.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>El listado general de registros (<strong>READ</strong>) se procesa en <code>index.php</code> mediante la ejecución de una consulta <code>SELECT</code> que recupera la totalidad de contactos almacenados en la tabla <code>contactos</code>, ordenados alfabéticamente por nombre y apellido (<code>ORDER BY nombre ASC, apellido ASC</code>). La extracción de datos se realiza con el método <code>$stmt-&gt;fetchAll()</code>, obteniendo una matriz asociativa optimizada gracias al modo <code>PDO::FETCH_ASSOC</code>.</p>
+                <p>En la vista, la información se recorre dinámicamente mediante un ciclo <code>foreach</code>, presentando cada contacto en una fila estilizada de tabla responsiva. El sistema verifica la existencia física de la imagen en la carpeta <code>archivos/</code> mediante <code>file_exists()</code>; si el archivo fue removido o el campo está vacío, el sistema sustituye automáticamente la imagen por el avatar genérico <code>archivos/default.png</code>, previniendo enlaces rotos en la interfaz.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 5</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 5 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 5: Consulta Individual de un Contacto (Detalle)</h2>
+                <span class="spec-tag">Requisito 5 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (ver.php)</div>
+            <div class="code-container">
+                <div class="code-header">Consulta Detallada por Identificador — ver.php</div>
+<pre><code>// Validación de entrada entera y consulta individual
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if (!$id || $id <= 0) { header('Location: index.php'); exit; }
+
+$sql = "SELECT * FROM contactos WHERE id = :id LIMIT 1";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([':id' => $id]);
+$contacto = $stmt->fetch();
+
+if (!$contacto) {
+    setFlash('warning', 'El contacto solicitado no fue encontrado.');
+    header('Location: index.php');
+    exit;
+}</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: VISTA COMPLETA DEL PERFIL DEL CONTACTO ver.php?id=1]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/ver.php?id=1</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>La lectura individual de contacto (<strong>READ individual</strong>) se implementó en <code>ver.php</code> para ofrecer una vista minuciosa del perfil del contacto. El módulo aplica una primera capa de validación mediante la función nativa <code>filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT)</code>, garantizando que el parámetro recibido a través de la URL sea obligatoriamente un número entero positivo antes de entablar cualquier interacción con el motor de base de datos.</p>
+                <p>Posteriormente, se ejecuta una consulta con el marcador <code>:id</code> y la cláusula <code>LIMIT 1</code>. Mediante <code>$stmt-&gt;fetch()</code>, se recupera exclusivamente el registro correspondiente. Si el usuario intenta forzar un identificador inexistente o manipulado, el script detecta el retorno booleano <code>false</code>, crea una notificación flash de advertencia y redirige limpiamente al listado principal sin romper la ejecución del servidor.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 6</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 6 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 6: Actualización de Datos (UPDATE)</h2>
+                <span class="spec-tag">Requisito 6 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (actualizar.php)</div>
+            <div class="code-container">
+                <div class="code-header">Lógica de Modificación de Registro — actualizar.php</div>
+<pre><code>// Sentencia UPDATE parametrizada en PDO
+$sql = "UPDATE contactos 
+        SET nombre = :nombre,
+            apellido = :apellido,
+            telefono = :telefono,
+            foto = :foto,
+            email = :email,
+            direccion = :direccion,
+            notas = :notas
+        WHERE id = :id";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute([
+    ':nombre'    => $nombre,
+    ':apellido'  => $apellido,
+    ':telefono'  => $telefono,
+    ':foto'      => $fotoFinal,
+    ':email'     => !empty($email) ? $email : null,
+    ':direccion' => !empty($direccion) ? $direccion : null,
+    ':notas'     => !empty($notas) ? $notas : null,
+    ':id'        => $id
+]);</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: FORMULARIO editar.php Y RESULTADO ACTUALIZADO]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/editar.php?id=1 -> ver.php?id=1</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>La actualización de registros (<strong>UPDATE</strong>) se divide en dos fases: la presentación del formulario prellenado (<code>editar.php</code>), el cual obtiene los datos actuales del contacto por su ID, y el procesamiento de los cambios (<code>actualizar.php</code>). El formulario transmite los datos vía <code>POST</code> acompañados del campo oculto <code>foto_actual</code>, permitiendo conservar la imagen previa si el usuario decide no seleccionar un archivo nuevo durante la edición.</p>
+                <p>En el controlador <code>actualizar.php</code>, si el usuario adjunta una nueva imagen válida, se almacena en el servidor y se procede a eliminar la fotografía anterior mediante <code>unlink()</code> (protegiendo las fotos de muestra del sistema). La sentencia <code>UPDATE</code> se ejecuta de forma segura con marcadores de posición PDO asegurando que únicamente se modifique el registro que coincida con el identificador <code>:id</code>.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 7</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 7 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 7: Eliminación de Datos (DELETE)</h2>
+                <span class="spec-tag">Requisito 7 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (eliminar.php)</div>
+            <div class="code-container">
+                <div class="code-header">Eliminación con Confirmación Previa — eliminar.php</div>
+<pre><code>if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 1. Obtener imagen asociada para liberar disco
+    $stmtFoto = $pdo->prepare("SELECT foto FROM contactos WHERE id = :id LIMIT 1");
+    $stmtFoto->execute([':id' => $id]);
+    $contacto = $stmtFoto->fetch();
+
+    // 2. Sentencia preparada DELETE
+    $sql = "DELETE FROM contactos WHERE id = :id";
+    $stmtDelete = $pdo->prepare($sql);
+    $stmtDelete->execute([':id' => $id]);
+
+    // 3. Borrado físico del archivo
+    if (!empty($contacto['foto']) && file_exists(__DIR__ . '/archivos/' . $contacto['foto'])) {
+        unlink(__DIR__ . '/archivos/' . $contacto['foto']);
+    }
+    setFlash('success', 'El contacto ha sido eliminado exitosamente.');
+    header('Location: index.php'); exit;
+}</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: PANTALLA ROJA DE CONFIRMACIÓN Y TABLA SIN EL CONTACTO]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/eliminar.php?id=1 -> index.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>Para cumplir con los estándares de seguridad web, la operación de borrado (<strong>DELETE</strong>) prohíbe terminantemente la eliminación directa a través de enlaces con método GET (lo cual previene borrados accidentales causados por indexadores o bots). Cuando se invoca <code>eliminar.php</code> vía GET, el sistema renderiza una pantalla de confirmación explícita con el resumen del contacto y un botón de cancelación.</p>
+                <p>Al pulsar el botón de eliminación, se emite una petición <code>POST</code> protegida con token CSRF. El controlador ejecuta una primera consulta para rescatar el nombre de la imagen asignada, aplica la instrucción <code>DELETE FROM contactos WHERE id = :id</code> mediante sentencias preparadas de PDO, y ejecuta la función <code>unlink()</code> para purgar el archivo del almacenamiento del servidor, asegurando la integridad tanto en la base de datos como en el sistema de archivos.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 8</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 8 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 8: Validación de Formularios (HTML5 y Servidor)</h2>
+                <span class="spec-tag">Requisito 8 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (guardar.php / crear.php)</div>
+            <div class="code-container">
+                <div class="code-header">Validación Defensiva en PHP — guardar.php</div>
+<pre><code>if (empty($nombre)) {
+    $errores[] = 'El campo Nombre es obligatorio.';
+}
+if (empty($telefono)) {
+    $errores[] = 'El campo Teléfono es obligatorio.';
+} elseif (!preg_match('/^[0-9\+\-\s\(\)]{7,20}$/', $telefono)) {
+    $errores[] = 'El formato del Teléfono no es válido.';
+}
+if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $errores[] = 'La dirección de correo electrónico ingresada no es válida.';
+}
+
+// Validación de archivo binario (MIME type real con finfo)
+$finfo = finfo_open(FILEINFO_MIME_TYPE);
+$mimeType = finfo_file($finfo, $_FILES['foto']['tmp_name']);
+finfo_close($finfo);
+if (!in_array($mimeType, ['image/jpeg', 'image/png', 'image/webp'], true)) {
+    $errores[] = 'Formato de imagen inválido o corrupto.';
+}</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: MENSAJES DE ERROR HTML5 Y ALERTA ROJA DE PHP]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/crear.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>Se implementó una estrategia de <strong>doble validación defensiva</strong>: del lado del cliente y del lado del servidor. En el cliente (<code>crear.php</code> y <code>editar.php</code>), se aplicaron atributos semánticos de HTML5 como <code>required</code>, <code>type="tel"</code>, <code>type="email"</code> y <code>pattern="[0-9\+\-\s\(\)]{7,20}"</code>, lo cual brinda retroalimentación instantánea al usuario y evita peticiones innecesarias.</p>
+                <p>Sin embargo, dado que las restricciones de cliente pueden ser omitidas o manipuladas desde las herramientas de desarrollador, el controlador <code>guardar.php</code> efectúa una validación exhaustiva en PHP. Se utilizan funciones como <code>mb_strlen()</code>, expresiones regulares con <code>preg_match()</code>, y <code>filter_var(..., FILTER_VALIDATE_EMAIL)</code>. En el caso del archivo adjunto, se audita el código de error en <code>$_FILES</code>, el tamaño en bytes y se analiza la cabecera binaria del archivo mediante la librería nativa <code>finfo</code> para confirmar que se trate de una imagen real.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 9</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 9 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 9: Sanitización de Salida (htmlspecialchars)</h2>
+                <span class="spec-tag">Requisito 9 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (config/db.php / index.php)</div>
+            <div class="code-container">
+                <div class="code-header">Función e() y Protección XSS en Vistas — config/db.php</div>
+<pre><code>// Función de sanitización centralizada
+function e($data): string {
+    return htmlspecialchars((string)($data ?? ''), ENT_QUOTES, 'UTF-8');
+}
+
+// Salida en la vista index.php:
+&lt;td&gt;
+    &lt;a href="ver.php?id=&lt;?= (int)$c['id']; ?&gt;" class="fw-bold text-dark"&gt;
+        &lt;?= e($c['nombre'] . ' ' . $c['apellido']); ?&gt;
+    &lt;/a&gt;
+&lt;/td&gt;
+&lt;td&gt;&lt;?= e($c['telefono']); ?&gt;&lt;/td&gt;
+&lt;td&gt;&lt;?= e($c['email']); ?&gt;&lt;/td&gt;</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: CÓDIGO HTML INYECTADO MOSTRADO COMO TEXTO SEGURO]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/index.php</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>La sanitización de salida es el pilar indispensable para mitigar vulnerabilidades de <strong>Cross-Site Scripting (XSS)</strong> reflejado y persistente. Para ello, se diseñó la función auxiliar <code>e($data)</code> en <code>config/db.php</code>, la cual encapsula la función nativa <code>htmlspecialchars()</code> configurada con las directivas de máxima seguridad: la bandera <code>ENT_QUOTES</code> (que convierte tanto comillas dobles como comillas simples en sus entidades HTML correspondientes) y la codificación <code>UTF-8</code>.</p>
+                <p>Esta función se invoca de forma obligatoria y sistemática en todas las vistas del proyecto (<code>index.php</code>, <code>ver.php</code>, <code>crear.php</code>, <code>editar.php</code>, <code>eliminar.php</code>) sobre cada variable proveniente de la base de datos o de los arreglos <code>$_POST</code> y <code>$_GET</code>. De esta manera, si un atacante intenta inyectar etiquetas como <code>&lt;script&gt;</code>, <code>&lt;iframe&gt;</code> o atributos maliciosos como <code>onload=...</code>, el motor los transforma en texto plano inofensivo (<code>&amp;lt;script&amp;gt;</code>), protegiendo la sesión del usuario.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 10</span>
+        </div>
+    </div>
+
+    <!-- ESPECIFICACIÓN 10 -->
+    <div class="page">
+        <div class="page-content">
+            <div class="page-header">
+                <h2>Especificación 10: Implementación de Búsqueda de Contactos</h2>
+                <span class="spec-tag">Requisito 10 de 10</span>
+            </div>
+
+            <div class="section-title">1. Captura del Código Fuente (index.php)</div>
+            <div class="code-container">
+                <div class="code-header">Búsqueda Multicampo con Comodín LIKE — index.php</div>
+<pre><code>$q = isset($_GET['q']) ? trim($_GET['q']) : '';
+
+if (!empty($q)) {
+    // Búsqueda multicampo con sentencia preparada segura
+    $sql = "SELECT * FROM contactos 
+            WHERE nombre LIKE :filtro 
+               OR apellido LIKE :filtro 
+               OR telefono LIKE :filtro 
+               OR email LIKE :filtro 
+            ORDER BY nombre ASC, apellido ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':filtro' => '%' . $q . '%']);
+} else {
+    $sql = "SELECT * FROM contactos ORDER BY nombre ASC, apellido ASC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+}
+$contactos = $stmt->fetchAll();</code></pre>
+            </div>
+
+            <div class="section-title">2. Captura de Ejecución (Navegador con URL visible)</div>
+            <div class="screenshot-box">
+                <div style="font-weight: 600; color: #475569;">[CAPTURA DE PANTALLA: FILTRO DE BÚSQUEDA ACTIVO index.php?q=Carlos]</div>
+                <div class="screenshot-label">URL Visible: http://localhost:8000/index.php?q=Carlos</div>
+            </div>
+
+            <div class="section-title">3. Explicación Técnica</div>
+            <div class="explanation-box">
+                <p>La búsqueda dinámica de contactos se implementó mediante el método HTTP <code>GET</code> en el controlador principal <code>index.php</code>, lo que permite compartir o guardar en marcadores la URL exacta con los resultados de la consulta. El valor del parámetro <code>$q</code> se captura y limpia mediante <code>trim()</code>; si contiene texto, el flujo bifurca hacia una consulta SQL condicional que examina múltiples campos simultáneamente utilizando el operador <code>LIKE</code>.</p>
+                <p>Para garantizar la inmunidad ante inyección SQL dentro de la cláusula <code>LIKE</code>, los comodines de porcentaje <code>%</code> se concatenan en el valor del parámetro dentro del arreglo de ejecución (<code>[':filtro' =&gt; '%' . $q . '%']</code>) y jamás directamente en la cadena SQL. La interfaz presenta en tiempo real una insignia con el total de coincidencias localizadas y un botón de restablecimiento que permite regresar al catálogo completo en un solo clic.</p>
+            </div>
+        </div>
+        <div class="page-footer">
+            <span>Agenda de Contactos PHP & MySQL</span>
+            <span>Página 11</span>
+        </div>
+    </div>
+
+</body>
+</html>
