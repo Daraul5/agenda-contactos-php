@@ -45,6 +45,18 @@ function getDBConnection(): PDO {
 
         // Soporte para conexiones SSL en bases de datos Cloud (TiDB, Aiven, etc.)
         if (getenv('DB_SSL') === 'true' || getenv('DB_SSL') === '1') {
+            $caPaths = [
+                getenv('DB_SSL_CA') ?: '',
+                '/etc/ssl/certs/ca-certificates.crt', // Debian/Ubuntu/Arch
+                '/etc/pki/tls/certs/ca-bundle.crt',   // RHEL/CentOS
+                '/etc/ssl/cert.pem',                  // Alpine/macOS
+            ];
+            foreach ($caPaths as $path) {
+                if (!empty($path) && file_exists($path)) {
+                    $options[PDO::MYSQL_ATTR_SSL_CA] = $path;
+                    break;
+                }
+            }
             $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
         }
 
