@@ -10,8 +10,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) pdo pdo_mysql gd \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Habilitar mod_rewrite de Apache
-RUN a2enmod rewrite
+# 2. Habilitar mod_rewrite y configurar pase de variables de entorno en Apache
+RUN a2enmod rewrite \
+    && echo "PassEnv DB_HOST DB_PORT DB_NAME DB_USER DB_PASS DB_SSL DB_SSL_CA" > /etc/apache2/conf-available/docker-env.conf \
+    && a2enconf docker-env
 
 # 3. Copiar el código fuente de la aplicación al directorio web
 COPY . /var/www/html/

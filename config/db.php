@@ -10,16 +10,23 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// ====================================================================
-// PARÁMETROS DE CONFIGURACIÓN DE BASE DE DATOS
-// ====================================================================
-// Para hosting gratuito (InfinityFree / AeonFree / ByetHost):
-// Reemplaza estos valores con los proporcionados en el cPanel / MySQL Details.
-define('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
-define('DB_PORT', getenv('DB_PORT') ?: '3306');
-define('DB_NAME', getenv('DB_NAME') ?: 'agenda_db');
-define('DB_USER', getenv('DB_USER') ?: 'root');
-define('DB_PASS', getenv('DB_PASS') ?: '');
+/**
+ * Obtiene una variable de entorno de forma segura consultando $_ENV, $_SERVER y getenv()
+ */
+function getDbEnv(string $key, string $default = ''): string {
+    if (isset($_ENV[$key]) && $_ENV[$key] !== '') return (string)$_ENV[$key];
+    if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') return (string)$_SERVER[$key];
+    $val = getenv($key);
+    if ($val !== false && $val !== '') return (string)$val;
+    return $default;
+}
+
+// Parámetros de conexión configurables con fallback directo a TiDB Cloud
+define('DB_HOST', getDbEnv('DB_HOST', 'gateway01.ap-northeast-1.prod.aws.tidbcloud.com'));
+define('DB_PORT', getDbEnv('DB_PORT', '4000'));
+define('DB_NAME', getDbEnv('DB_NAME', 'test'));
+define('DB_USER', getDbEnv('DB_USER', '39RADzWgvPJ5PXi.root'));
+define('DB_PASS', getDbEnv('DB_PASS', 'ikXCHI7Ql3wf6pFr'));
 define('DB_CHARSET', 'utf8mb4');
 
 /**
@@ -44,9 +51,10 @@ function getDBConnection(): PDO {
         ];
 
         // Soporte para conexiones SSL en bases de datos Cloud (TiDB, Aiven, etc.)
-        if (getenv('DB_SSL') === 'true' || getenv('DB_SSL') === '1') {
+        $requiereSSL = (strpos(DB_HOST, 'tidbcloud.com') !== false || DB_PORT == '4000' || getDbEnv('DB_SSL') === 'true' || getDbEnv('DB_SSL') === '1');
+        if ($requiereSSL) {
             $caPaths = [
-                getenv('DB_SSL_CA') ?: '',
+                getDbEnv('DB_SSL_CA'),
                 '/etc/ssl/certs/ca-certificates.crt', // Debian/Ubuntu/Arch
                 '/etc/pki/tls/certs/ca-bundle.crt',   // RHEL/CentOS
                 '/etc/ssl/cert.pem',                  // Alpine/macOS
