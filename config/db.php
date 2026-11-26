@@ -43,6 +43,11 @@ function getDBConnection(): PDO {
             PDO::ATTR_EMULATE_PREPARES   => false, // Sentencias preparadas reales en el motor MySQL
         ];
 
+        // Soporte para conexiones SSL en bases de datos Cloud (TiDB, Aiven, etc.)
+        if (getenv('DB_SSL') === 'true' || getenv('DB_SSL') === '1') {
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+        }
+
         try {
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
