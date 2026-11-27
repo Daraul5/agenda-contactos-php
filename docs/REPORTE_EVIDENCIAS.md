@@ -372,15 +372,23 @@ Esta función se invoca de forma obligatoria y sistemática en todas las vistas 
 $q = isset($_GET['q']) ? trim($_GET['q']) : '';
 
 if (!empty($q)) {
-    // Búsqueda multicampo mediante sentencias preparadas y marcadores nombrados
+    // Búsqueda multicampo mediante sentencias preparadas y marcadores nombrados únicos
     $sql = "SELECT * FROM contactos 
-            WHERE nombre LIKE :filtro 
-               OR apellido LIKE :filtro 
-               OR telefono LIKE :filtro 
-               OR email LIKE :filtro 
+            WHERE nombre LIKE :f1 
+               OR apellido LIKE :f2 
+               OR telefono LIKE :f3 
+               OR email LIKE :f4 
+               OR CONCAT(nombre, ' ', apellido) LIKE :f5
             ORDER BY nombre ASC, apellido ASC";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':filtro' => '%' . $q . '%']);
+    $param = '%' . $q . '%';
+    $stmt->execute([
+        ':f1' => $param,
+        ':f2' => $param,
+        ':f3' => $param,
+        ':f4' => $param,
+        ':f5' => $param,
+    ]);
 } else {
     $sql = "SELECT * FROM contactos ORDER BY nombre ASC, apellido ASC";
     $stmt = $pdo->prepare($sql);

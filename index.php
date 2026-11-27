@@ -15,15 +15,23 @@ try {
 
     // Consulta de datos con sentencias preparadas (Especificación 4 y 10)
     if (!empty($q)) {
-        // Búsqueda multicampo mediante marcadores PDO
+        // Búsqueda multicampo mediante marcadores nombrados únicos (compatibilidad nativa PDO)
         $sql = "SELECT * FROM contactos 
-                WHERE nombre LIKE :filtro 
-                   OR apellido LIKE :filtro 
-                   OR telefono LIKE :filtro 
-                   OR email LIKE :filtro 
+                WHERE nombre LIKE :f1 
+                   OR apellido LIKE :f2 
+                   OR telefono LIKE :f3 
+                   OR email LIKE :f4 
+                   OR CONCAT(nombre, ' ', apellido) LIKE :f5
                 ORDER BY nombre ASC, apellido ASC";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([':filtro' => '%' . $q . '%']);
+        $param = '%' . $q . '%';
+        $stmt->execute([
+            ':f1' => $param,
+            ':f2' => $param,
+            ':f3' => $param,
+            ':f4' => $param,
+            ':f5' => $param,
+        ]);
     } else {
         // Listado completo de la tabla contactos
         $sql = "SELECT * FROM contactos ORDER BY nombre ASC, apellido ASC";
