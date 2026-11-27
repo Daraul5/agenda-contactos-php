@@ -9,17 +9,18 @@
     --primary-hover: #059669;
     --primary-light: rgba(16, 185, 129, 0.14);
     --accent-gradient: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-    --success-color: #34d399;
-    --danger-color: #fb7185;
-    --warning-color: #fbbf24;
-    --info-color: #38bdf8;
+    --success-color: #6ee7b7;
+    --danger-color: #fda4af;
+    --warning-color: #fcd34d;
+    --info-color: #67e8f9;
     --body-bg: #090d16;
     --card-bg: #111827;
     --surface-subtle: #1e293b;
     --border-color: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(16, 185, 129, 0.5);
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
+    --text-primary: #f3efe6;
+    --text-secondary: #a8b0bc;
+    --text-accent: #6ee7b7;
     --radius-xl: 24px;
     --radius-lg: 20px;
     --radius-md: 12px;
@@ -39,6 +40,10 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+h1, h2, h3, h4, h5 {
+    color: var(--text-primary);
+}
+
 .custom-navbar {
     background: rgba(9, 13, 22, 0.75) !important;
     backdrop-filter: blur(18px);
@@ -47,13 +52,22 @@ body {
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
 
+.custom-navbar .navbar-brand,
+.custom-navbar .nav-link {
+    color: var(--text-primary) !important;
+}
+
+.custom-navbar .nav-link:hover {
+    color: var(--text-accent) !important;
+}
+
 .brand-icon {
     width: 40px;
     height: 40px;
     font-size: 1.15rem;
     border-radius: 12px;
     background: var(--accent-gradient) !important;
-    color: #042f2e !important;
+    color: #062826 !important;
     box-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
 }
 
@@ -67,7 +81,7 @@ body {
 }
 
 .search-input::placeholder {
-    color: var(--text-secondary) !important;
+    color: #cbd5e1 !important;
 }
 
 .search-input:focus {
@@ -82,6 +96,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    color: var(--text-primary);
     position: relative;
     overflow: hidden;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
@@ -158,7 +173,7 @@ body {
     overflow: hidden;
     margin: 0 auto 16px auto;
     background-color: var(--primary-light);
-    color: var(--primary-color);
+    color: var(--text-accent);
     transition: all 0.25s ease;
 }
 
@@ -184,7 +199,7 @@ body {
     font-size: 0.74rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--primary-color);
+    color: var(--info-color);
     background-color: transparent;
     border: none;
     padding: 10px 16px;
@@ -237,17 +252,17 @@ body {
 
 .badge-soft-primary {
     background-color: rgba(6, 182, 212, 0.15);
-    color: #38bdf8;
-    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #a5f3fc;
+    border: 1px solid rgba(103, 232, 249, 0.35);
     font-weight: 600;
     padding: 0.4em 0.85em;
     border-radius: 9999px;
 }
 
 .badge-soft-success {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #34d399;
-    border: 1px solid rgba(52, 211, 153, 0.35);
+    background-color: rgba(16, 185, 129, 0.16);
+    color: #a7f3d0;
+    border: 1px solid rgba(110, 231, 183, 0.35);
     font-weight: 600;
     padding: 0.4em 0.85em;
     border-radius: 9999px;
@@ -279,7 +294,7 @@ body {
     border-radius: 12px;
     background: var(--accent-gradient);
     font-size: 1.15rem;
-    color: #042f2e;
+    color: #062826;
     margin-right: 16px;
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
@@ -289,7 +304,7 @@ body {
     margin: 0;
     font-size: 0.72rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--text-accent);
     text-transform: uppercase;
     letter-spacing: 0.08em;
 }
@@ -311,6 +326,11 @@ body {
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-color) !important;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
+}
+
+.form-label {
+    color: #e2e8f0;
+    font-weight: 500;
 }
 
 .text-muted {
