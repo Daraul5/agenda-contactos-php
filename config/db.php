@@ -22,11 +22,11 @@ function getDbEnv(string $key, string $default = ''): string {
 }
 
 // Parámetros de conexión configurables con fallback directo a TiDB Cloud
-define('DB_HOST', getDbEnv('DB_HOST', 'gateway01.ap-northeast-1.prod.aws.tidbcloud.com'));
-define('DB_PORT', getDbEnv('DB_PORT', '4000'));
-define('DB_NAME', getDbEnv('DB_NAME', 'test'));
-define('DB_USER', getDbEnv('DB_USER', '39RADzWgvPJ5PXi.root'));
-define('DB_PASS', getDbEnv('DB_PASS', 'ikXCHI7Ql3wf6pFr'));
+define('DB_HOST', getDbEnv('DB_HOST', '127.0.0.1'));
+define('DB_PORT', getDbEnv('DB_PORT', '3306'));
+define('DB_NAME', getDbEnv('DB_NAME', 'agenda_db'));
+define('DB_USER', getDbEnv('DB_USER', 'root'));
+define('DB_PASS', getDbEnv('DB_PASS', ''));
 define('DB_CHARSET', 'utf8mb4');
 
 /**
