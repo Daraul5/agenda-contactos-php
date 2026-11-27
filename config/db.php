@@ -75,7 +75,7 @@ function getDBConnection(): PDO {
             error_log("Error crítico en PDO: " . $e->getMessage());
             die("
                 <div style='font-family: system-ui, -apple-system, sans-serif; max-width: 650px; margin: 60px auto; padding: 25px; border-left: 5px solid #dc2626; background: #fef2f2; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);'>
-                    <h3 style='color: #991b1b; margin-top: 0;'>⚠️ Error de Conexión a la Base de Datos</h3>
+                    <h3 style='color: #991b1b; margin-top: 0;'> Error de Conexión a la Base de Datos</h3>
                     <p style='color: #374151; font-size: 15px; line-height: 1.5;'>
                         No fue posible conectarse a MySQL mediante PDO. Por favor verifique que las credenciales en <code>config/db.php</code> sean correctas y que el servidor de base de datos esté encendido.
                     </p>
