@@ -69,14 +69,14 @@ include __DIR__ . '/includes/header.php';
         <div class="card card-custom border-0 shadow-sm overflow-hidden">
             
             <!-- Banner Superior con Foto de Perfil -->
-            <div class="bg-primary text-white text-center py-4 px-3" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;">
+            <div class="text-center py-4 px-3 border-bottom" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(6, 182, 212, 0.18) 100%), var(--card-bg); border-color: var(--border-color) !important;">
                 <div class="mb-3">
                     <img src="<?= e($rutaFoto); ?>" 
                          alt="<?= e($contacto['nombre'] . ' ' . $contacto['apellido']); ?>" 
                          class="contact-avatar-lg shadow">
                 </div>
-                <h3 class="fw-bold mb-1"><?= e($contacto['nombre'] . ' ' . $contacto['apellido']); ?></h3>
-                <span class="badge bg-white text-primary px-3 py-1 rounded-pill fw-semibold">
+                <h3 class="fw-bold mb-1 text-light"><?= e($contacto['nombre'] . ' ' . $contacto['apellido']); ?></h3>
+                <span class="badge badge-soft-primary px-3 py-1 rounded-pill fw-semibold">
                     ID de Registro: #<?= (int)$contacto['id']; ?>
                 </span>
             </div>
@@ -94,10 +94,10 @@ include __DIR__ . '/includes/header.php';
                     <div class="detail-content flex-grow-1">
                         <h6>Teléfono Principal (Obligatorio)</h6>
                         <p>
-                            <a href="tel:<?= e($contacto['telefono']); ?>" class="text-decoration-none text-dark fw-bold">
+                            <a href="tel:<?= e($contacto['telefono']); ?>" class="text-decoration-none text-light fw-bold">
                                 <?= e($contacto['telefono']); ?>
                             </a>
-                            <span class="badge bg-success-subtle text-success ms-2">Móvil</span>
+                            <span class="badge badge-soft-success ms-2">Móvil</span>
                         </p>
                     </div>
                     <div>
@@ -116,7 +116,7 @@ include __DIR__ . '/includes/header.php';
                         <h6>Correo Electrónico</h6>
                         <p>
                             <?php if (!empty($contacto['email'])): ?>
-                                <a href="mailto:<?= e($contacto['email']); ?>" class="text-decoration-none text-dark">
+                                <a href="mailto:<?= e($contacto['email']); ?>" class="text-decoration-none text-light">
                                     <?= e($contacto['email']); ?>
                                 </a>
                             <?php else: ?>
@@ -179,7 +179,7 @@ include __DIR__ . '/includes/header.php';
             </div>
 
             <!-- Footer de la Tarjeta con Botones de Acción -->
-            <div class="card-footer bg-light p-3 d-flex justify-content-between align-items-center">
+            <div class="card-footer p-3 d-flex justify-content-between align-items-center border-top" style="background-color: rgba(30, 41, 59, 0.45); border-color: var(--border-color) !important;">
                 <span class="text-muted small">
                     <i class="bi bi-shield-check text-success me-1"></i> Registro verificado por PDO
                 </span>

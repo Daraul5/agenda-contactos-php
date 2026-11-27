@@ -50,13 +50,13 @@ include __DIR__ . '/includes/header.php';
 
         <!-- Tarjeta del Formulario de Edición -->
         <div class="card card-custom border-0 shadow-sm">
-            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <div class="card-header border-bottom py-3 d-flex justify-content-between align-items-center" style="background-color: rgba(30, 41, 59, 0.45); border-color: var(--border-color) !important;">
                 <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-warning-subtle text-warning-emphasis p-2 rounded-3">
                         <i class="bi bi-pencil-square fs-5"></i>
                     </span>
                     <div>
-                        <h4 class="card-title fw-bold mb-0">Modificar Contacto #<?= (int)$contacto['id']; ?></h4>
+                        <h4 class="card-title fw-bold mb-0 text-light">Modificar Contacto #<?= (int)$contacto['id']; ?></h4>
                         <small class="text-muted">Actualice la información y guarde los cambios</small>
                     </div>
                 </div>
@@ -182,12 +182,12 @@ include __DIR__ . '/includes/header.php';
                     </div>
 
                     <!-- Botones de Acción -->
-                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary-subtle">
                         <a href="eliminar.php?id=<?= (int)$contacto['id']; ?>" class="btn btn-outline-danger btn-sm">
                             <i class="bi bi-trash3 me-1"></i> Eliminar Registro
                         </a>
                         <div class="d-flex gap-2">
-                            <a href="ver.php?id=<?= (int)$contacto['id']; ?>" class="btn btn-light border px-4">Cancelar</a>
+                            <a href="ver.php?id=<?= (int)$contacto['id']; ?>" class="btn btn-outline-secondary px-4">Cancelar</a>
                             <button type="submit" class="btn btn-warning px-4 fw-semibold shadow-sm">
                                 <i class="bi bi-arrow-repeat me-1"></i> Actualizar Contacto
                             </button>

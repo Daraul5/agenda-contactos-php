@@ -19,13 +19,13 @@ include __DIR__ . '/includes/header.php';
         
         <!-- Tarjeta del Formulario -->
         <div class="card card-custom border-0 shadow-sm">
-            <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+            <div class="card-header border-bottom py-3 d-flex justify-content-between align-items-center" style="background-color: rgba(30, 41, 59, 0.45); border-color: var(--border-color) !important;">
                 <div class="d-flex align-items-center gap-2">
                     <span class="badge bg-primary-subtle text-primary p-2 rounded-3">
                         <i class="bi bi-person-plus-fill fs-5"></i>
                     </span>
                     <div>
-                        <h4 class="card-title fw-bold mb-0">Agregar Nuevo Contacto</h4>
+                        <h4 class="card-title fw-bold mb-0 text-light">Agregar Nuevo Contacto</h4>
                         <small class="text-muted">Complete los campos obligatorios para registrar en la agenda</small>
                     </div>
                 </div>
@@ -155,8 +155,8 @@ include __DIR__ . '/includes/header.php';
                     </div>
 
                     <!-- Botones de Acción -->
-                    <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-                        <a href="index.php" class="btn btn-light border px-4">Cancelar</a>
+                    <div class="d-flex justify-content-end gap-2 pt-3 border-top border-secondary-subtle">
+                        <a href="index.php" class="btn btn-outline-secondary px-4">Cancelar</a>
                         <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
                             <i class="bi bi-check2-circle me-1"></i> Guardar Contacto
                         </button>

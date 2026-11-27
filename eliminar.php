@@ -122,7 +122,7 @@ include __DIR__ . '/includes/header.php';
                          class="contact-avatar-lg border-danger shadow-sm">
                 </div>
 
-                <h4 class="fw-bold text-dark mb-1">
+                <h4 class="fw-bold text-light mb-1">
                     ¿Está seguro de eliminar a <?= e($contacto['nombre'] . ' ' . $contacto['apellido']); ?>?
                 </h4>
                 

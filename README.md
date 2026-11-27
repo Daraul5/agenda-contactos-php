@@ -19,8 +19,8 @@
 
 ## 🔗 Enlaces de Entrega del Proyecto
 
-- **Repositorio Público en GitHub:** [https://github.com/Daraul5/agenda-contactos-php](https://github.com/Daraul5/agenda-contactos-php) *(Reemplazar con el enlace final)*
-- **Aplicación Web Publicada en Servidor Real (Hosting):** [https://agenda-contactos-pw.infinityfreeapp.com](https://agenda-contactos-pw.infinityfreeapp.com) *(Reemplazar con el enlace de InfinityFree/ByetHost)*
+- **Repositorio Público en GitHub:** [https://github.com/Daraul5/agenda-contactos-php](https://github.com/Daraul5/agenda-contactos-php)
+- **Aplicación Web Publicada en Servidor Real (Hosting):** [https://agenda-contactos-pw.infinityfreeapp.com](https://agenda-contactos-pw.infinityfreeapp.com)
 
 ---
 
@@ -37,7 +37,7 @@ Aplicación web dinámica desarrollada en **PHP 8** y **MySQL / MariaDB** para l
 - **Capa de Abstracción de Datos:** **PDO (PHP Data Objects)** con sentencias preparadas nativas (`prepare` y `execute`).
 - **Diseño Visual e Interfaz de Usuario:**
   - HTML5 semántico con validación nativa de formularios.
-  - CSS3 modular externo (`css/styles.css`).
+  - CSS3 modular externo (`css/styles.css`) con soporte para tema oscuro moderno.
   - Bootstrap 5.3 (Framework responsive y componentes interactivos).
   - Bootstrap Icons (Iconografía vectorial moderna).
 - **Seguridad Web:**
@@ -47,6 +47,9 @@ Aplicación web dinámica desarrollada en **PHP 8** y **MySQL / MariaDB** para l
   - Confirmación de borrado restrictiva mediante peticiones **POST**.
   - Validación profunda de archivos binarios subidos (extensiones, tipos MIME reales con `finfo` y cuota máxima en bytes).
   - Ocultación de errores SQL internos al usuario final con registro en `error_log`.
+- **Contenerización y Despliegue:**
+  - Docker con Apache y extensiones PHP (PDO MySQL, GD para manejo de imágenes).
+  - Compatibilidad con bases de datos en la nube (TiDB Cloud, Aiven) mediante soporte SSL.
 
 ---
 
@@ -56,12 +59,13 @@ Aplicación web dinámica desarrollada en **PHP 8** y **MySQL / MariaDB** para l
 | :--- | :--- | :--- |
 | **CREATE (Vista)** | `crear.php` | Formulario HTML5 con validaciones de cliente (`required`, `type`, `pattern`) y previsualización de imagen en tiempo real. |
 | **CREATE (Lógica)** | `guardar.php` | Valida token CSRF, audita entradas en servidor, valida y sube la foto a `archivos/` con nombre criptográfico único, y ejecuta `INSERT INTO contactos` con PDO. |
-| **READ (General)** | `index.php` | Lista todos los contactos ordenados alfabéticamente en tabla responsiva y tarjetas con fotos de perfil. |
-| **READ (Búsqueda)**| `index.php?q=...` | Buscador multicampo con filtro dinámico `WHERE nombre LIKE :q OR apellido LIKE :q OR telefono LIKE :q OR email LIKE :q`. |
-| **READ (Detalle)** | `ver.php?id=...` | Muestra el perfil completo del contacto individual validando el ID numérico con `FILTER_VALIDATE_INT`. |
+| **READ (General)** | `index.php` | Lista todos los contactos ordenados alfabéticamente en **vista dual interactiva**: cuadrícula de tarjetas de perfil y tabla responsiva. |
+| **READ (Búsqueda)**| `index.php?q=...` | Buscador multicampo con filtro dinámico y marcadores nombrados únicos (`:f1` a `:f5`) sobre nombre, apellido, teléfono, email y nombre completo concatenado. |
+| **READ (Detalle)** | `ver.php?id=...` | Muestra el perfil completo del contacto individual validando el ID numérico con `FILTER_VALIDATE_INT`, accesos directos de llamada y correo. |
 | **UPDATE (Vista)** | `editar.php?id=...` | Carga los datos existentes en el formulario, permitiendo actualizar datos y opcionalmente reemplazar la fotografía. |
-| **UPDATE (Lógica)**| `actualizar.php` | Valida datos en servidor, gestiona la sustitución de imagen y ejecuta `UPDATE contactos SET ... WHERE id = :id`. |
+| **UPDATE (Lógica)**| `actualizar.php` | Valida datos en servidor, gestiona la sustitución de imagen, borra la imagen previa del disco y ejecuta `UPDATE contactos SET ... WHERE id = :id`. |
 | **DELETE** | `eliminar.php` | Pantalla de confirmación previa vía GET y ejecución definitiva mediante formulario POST seguro que elimina el registro en BD y el archivo físico. |
+| **EXPORTACIÓN** | `exportar.php` | Generación y descarga directa del directorio en formato **CSV** con codificación UTF-8 (BOM incluido para compatibilidad universal con Excel). |
 
 ---
 
@@ -70,16 +74,17 @@ Aplicación web dinámica desarrollada en **PHP 8** y **MySQL / MariaDB** para l
 ```text
 agenda-contactos/
 │
-├── index.php             # Listado principal y buscador dinámico (READ)
+├── index.php             # Listado principal, visualización dual (tarjetas/tabla) y buscador dinámico (READ)
 ├── crear.php             # Formulario de alta de nuevo contacto (CREATE vista)
 ├── guardar.php           # Procesamiento de inserción y subida de fotografía (CREATE lógica)
 ├── editar.php            # Formulario de modificación con datos existentes (UPDATE vista)
 ├── actualizar.php        # Procesamiento de actualización y reemplazo de foto (UPDATE lógica)
 ├── ver.php               # Detalle completo de contacto individual (READ individual)
 ├── eliminar.php          # Confirmación visual y procesamiento seguro de borrado (DELETE)
+├── exportar.php          # Exportación del directorio a formato CSV (UTF-8 BOM)
 │
 ├── config/
-│   └── db.php            # Conexión PDO, constantes de configuración y funciones de seguridad (e, CSRF, Flash)
+│   └── db.php            # Conexión PDO, soporte para variables de entorno / SSL y funciones de seguridad (e, CSRF, Flash)
 │
 ├── includes/
 │   ├── header.php        # Cabecera HTML5, hojas de estilos, metadatos y alertas flash
@@ -87,7 +92,7 @@ agenda-contactos/
 │   └── footer.php        # Pie de página institucional, créditos del equipo y scripts JS
 │
 ├── css/
-│   └── styles.css        # Hoja de estilos personalizada externa
+│   └── styles.css        # Hoja de estilos personalizada externa con paleta moderna y tema oscuro
 │
 ├── archivos/             # Carpeta de almacenamiento para fotografías de contactos
 │   ├── default.png       # Avatar por defecto de respaldo
@@ -98,6 +103,8 @@ agenda-contactos/
 ├── sql/
 │   └── schema.sql        # Script DDL/DML para crear la base de datos, tabla y registros semilla
 │
+├── Dockerfile            # Configuración para despliegue contenerizado en Docker / Render
+├── .dockerignore         # Exclusiones de archivos para el contexto de Docker
 ├── .gitignore            # Exclusión de archivos temporales del repositorio
 └── README.md             # Documentación técnica completa del proyecto
 ```
@@ -107,7 +114,7 @@ agenda-contactos/
 ## 💻 Instrucciones para Ejecución Local
 
 ### 1. Prerrequisitos
-- PHP 8.0 o superior con extensión `pdo_mysql` habilitada.
+- PHP 8.0 o superior con extensión `pdo_mysql` habilitada (o Docker instalado).
 - Servidor MySQL o MariaDB (vía XAMPP, Laragon, WAMP o nativo).
 
 ### 2. Base de Datos
@@ -115,22 +122,48 @@ agenda-contactos/
 2. Abra **phpMyAdmin** (`http://localhost/phpmyadmin`) o su gestor favorito (DBeaver, MySQL Workbench).
 3. Importe o ejecute el archivo [`sql/schema.sql`](sql/schema.sql). Esto creará la base de datos `agenda_db` y la tabla `contactos` con datos de prueba iniciales.
 
-### 3. Configuración de Conexión
-Si sus credenciales locales son diferentes a `root` sin contraseña en `localhost`, modifique el archivo [`config/db.php`](config/db.php):
+### 3. Configuración de Conexión y Variables de Entorno
+La aplicación detecta automáticamente variables de entorno o usa los valores por defecto en [`config/db.php`](config/db.php):
 ```php
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');
-define('DB_NAME', 'agenda_db');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', getDbEnv('DB_HOST', '127.0.0.1'));
+define('DB_PORT', getDbEnv('DB_PORT', '3306'));
+define('DB_NAME', getDbEnv('DB_NAME', 'agenda_db'));
+define('DB_USER', getDbEnv('DB_USER', 'root'));
+define('DB_PASS', getDbEnv('DB_PASS', ''));
 ```
 
-### 4. Servidor de Desarrollo Local
+| Variable de Entorno | Descripción | Valor por Defecto |
+| :--- | :--- | :--- |
+| `DB_HOST` | Host del servidor de MySQL/MariaDB | `127.0.0.1` |
+| `DB_PORT` | Puerto de escucha de MySQL | `3306` |
+| `DB_NAME` | Nombre de la base de datos | `agenda_db` |
+| `DB_USER` | Usuario con permisos en la base de datos | `root` |
+| `DB_PASS` | Contraseña de acceso a la base de datos | *(vacío)* |
+| `DB_SSL` | Activar soporte SSL (`true` o `1`) para cloud DBs | *(inactivo)* |
+
+### 4. Servidor de Desarrollo Local con PHP
 Desde la raíz del proyecto, ejecute en terminal:
 ```bash
 php -S localhost:8000
 ```
 Luego ingrese en su navegador web a: **`http://localhost:8000`**
+
+### 5. Ejecución con Docker (Opcional)
+Si prefiere ejecutar la aplicación en un contenedor Docker con Apache y PHP preconfigurados:
+```bash
+# Construir la imagen
+docker build -t agenda-contactos .
+
+# Ejecutar el contenedor
+docker run -d -p 8000:80 \
+  -e DB_HOST=host.docker.internal \
+  -e DB_PORT=3306 \
+  -e DB_NAME=agenda_db \
+  -e DB_USER=root \
+  -e DB_PASS= \
+  --name agenda-app agenda-contactos
+```
+Luego abra en su navegador: **`http://localhost:8000`**
 
 ---
 

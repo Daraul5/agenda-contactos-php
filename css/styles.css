@@ -323,6 +323,21 @@ h1, h2, h3, h4, h5 {
     border-radius: var(--radius-md) !important;
 }
 
+.input-group-text {
+    background-color: rgba(30, 41, 59, 0.85) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.card-contact .contact-avatar {
+    cursor: pointer;
+    transition: transform 0.25s ease;
+}
+
+.card-contact:hover .contact-avatar {
+    transform: scale(1.05);
+}
+
 .form-control:focus, .form-select:focus {
     border-color: var(--primary-color) !important;
     box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important;
